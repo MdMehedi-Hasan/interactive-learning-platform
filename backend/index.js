@@ -50,6 +50,17 @@ async function run() {
               const result = await collection.updateOne(filter, updateDoc);
             res.send(result)
         })
+        app.put('/watched/:id', async(req, res) => {
+            const id = parseInt(req.params.id)
+            const filter = { _id: id }
+            const updateDoc = {
+                $set: {
+                    watched: true
+                },
+              };
+              const result = await collection.updateOne(filter, updateDoc);
+            res.send(result)
+        })
     } finally {
         // Ensures that the client will close when you finish/error
         //   await client.close();

@@ -1,15 +1,16 @@
-import Navbar from "../../components/Common/Navbar";
-import '../../assets/css/class.css'
 import { useEffect, useState } from "react";
 import axios from 'axios'
+import Navbar from "../../components/Common/Navbar";
+import Footer from "../../components/Common/Footer";
 import bookIcon from '../../assets/images/book.png'
 import bookmarkIcon from '../../assets/images/bookmark.png'
 import penIcon from '../../assets/images/pen.png'
-import Footer from "../../components/Common/Footer";
+import '../../assets/css/class.css'
 
 const Class = () => {
     const [lists, setLists] = useState([])
     const [video, setVideo] = useState({})
+    const [progress, setProgress] = useState(0)
 
     const playVideo = (id) => {
         axios.get(`http://localhost:3000/${id}`)
@@ -23,14 +24,20 @@ const Class = () => {
     const nextPrevious = (id,type) => {
         console.log(id, type);
         if (type == 'next') {
+            axios.put(`http://localhost:3000/watched/${id}`)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
             const videoId = ++id
             playVideo(videoId)
-            console.log(videoId);
         }
         else {
             const videoId = --id
             playVideo(videoId)
-            console.log(videoId);
         }
     }
     const notes = () => {
@@ -58,11 +65,29 @@ const Class = () => {
             })
         }
     }
+    const progressCount = async () => {
+        console.log(lists)
+        let arr = 0
+        let length = lists?.length
+        for (let i = 0; i < length; i++){
+            if (lists[i]?.watched == true) {
+                ++arr
+                console.log("loop");
+            }
+        }
+        const result = await parseInt((arr*100)/lists?.length)
+        setProgress(result)
+        console.log(arr,result)
+    }
     useEffect(() => {
         axios.get('http://localhost:3000/')
             .then(function (response) {
                 setLists(response.data)
                 setVideo(response.data[0])
+                // progressCount()
+                if (response?.data?.length>0) {
+                    progressCount()
+                }
             })
             .catch(function (error) {
                 console.log(error);
@@ -103,8 +128,8 @@ const Class = () => {
                         <div className="border rounded-lg py-5 flex justify-between px-2 mb-5">
                             <div className="flex items-center gap-5">
                                 <span>Content Watched</span>
-                                <progress className="progress progress-accent w-40" value="30" max="100"></progress>
-                                <span>30%</span>
+                                <progress className="progress progress-accent w-40" value={progress && progress} max="100"></progress>
+                                <span>{progress && progress}%</span>
                             </div>
                             <span className="pr-3">(1/{lists.length})</span>
                         </div>
