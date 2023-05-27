@@ -1,9 +1,9 @@
 const Navbar = () => {
     return (
-        <div>
-            <div className="navbar bg-red-100">
+        <div className="bg-blue-900">
+            <div className="navbar container mx-auto">
                 <div className="flex-1">
-                    <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
+                    <a className="btn btn-ghost normal-case text-xl h-auto"><img src="https://interactivecares-courses.com/wp-content/uploads/2021/03/IC-logo-Telda.png" alt="" className="w-36"/></a>
                 </div>
                 <div className="flex-none">
                     <ul className="menu menu-horizontal px-1">

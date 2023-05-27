@@ -34,8 +34,8 @@ async function run() {
         })
         // Specific video
         app.get('/:id', async (req, res) => {
-            const id = req.params.id
-            const query = {_id: new ObjectId(id)}
+            const id = parseInt(req.params.id)
+            const query = {_id: id}
             const result = await collection.findOne(query);
             console.log(result,query);
             res.send(result)
