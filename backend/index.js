@@ -40,6 +40,18 @@ async function run() {
             console.log(result,query);
             res.send(result)
         })
+        app.put('/bookmark/:id', async(req, res) => {
+            const id = parseInt(req.params.id)
+            const filter = { _id: id }
+            const updateDoc = {
+                $set: {
+                    bookmarked: true
+                },
+              };
+              const result = await collection.updateOne(filter, updateDoc);
+              console.log(id,result);
+            res.send(result)
+        })
     } finally {
         // Ensures that the client will close when you finish/error
         //   await client.close();
