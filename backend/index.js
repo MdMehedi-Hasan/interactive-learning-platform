@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const dotenv = require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
@@ -25,9 +25,19 @@ async function run() {
         // Send a ping to confirm a successful connection
         // await client.db("admin").command({ ping: 1 });
         // console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
+        // All videos
         app.get('/', async(req, res) => {
             const query = {}
             const result = await collection.find(query).toArray();
+            res.send(result)
+        })
+        // Specific video
+        app.get('/:id', async (req, res) => {
+            const id = req.params.id
+            const query = {_id: new ObjectId(id)}
+            const result = await collection.findOne(query);
+            console.log(result,query);
             res.send(result)
         })
     } finally {
