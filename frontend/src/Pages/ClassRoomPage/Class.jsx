@@ -20,6 +20,19 @@ const Class = () => {
                 console.log(error);
             })
     }
+    const nextPrevious = (id,type) => {
+        console.log(id, type);
+        if (type == 'next') {
+            const videoId = ++id
+            playVideo(videoId)
+            console.log(videoId);
+        }
+        else {
+            const videoId = --id
+            playVideo(videoId)
+            console.log(videoId);
+        }
+    }
     const notes = () => {
         const collapseBox = document.getElementById('collapseBox')
         const checkbox = document.getElementById('collapseCheckBox')
@@ -35,14 +48,15 @@ const Class = () => {
         }
     }
     const bookmark = (id) => {
-        console.log('jdjdj',id);
-        axios.put(`http://localhost:3000/bookmark/${id}`)
+        if (!video.bookmarked) {
+            axios.put(`http://localhost:3000/bookmark/${id}`)
             .then(function (response) {
                 console.log(response);
             })
             .catch(function (error) {
                 console.log(error);
             })
+        }
     }
     useEffect(() => {
         axios.get('http://localhost:3000/')
@@ -68,21 +82,21 @@ const Class = () => {
                                     <img src={penIcon} alt="" className="w-5" />
                                     <span className="text-white">Take Notes</span>
                                 </div>
-                                <div className="flex items-center cursor-pointer" onClick={() => bookmark(video?._id)}>
+                                <div className={`flex items-center ${video.bookmarked == true ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`} onClick={() => bookmark(video?._id)}>
                                     <img src={bookmarkIcon} alt="" className="w-5" />
-                                    <span className="text-white">Bookmark</span>
+                                    <span className="text-white">{video.bookmarked == true ? 'Bookmarked' : 'Bookmark'}</span>
                                 </div>
                             </div>
                         </div>
                         <div className="collapse hidden" id="collapseBox">
                             <input type="checkbox" id="collapseCheckBox"/>
                             <div className="collapse-content">
-                                <p>hello</p>
+                                <p>Notes will be written here</p>
                             </div>
                         </div>
                         <div className="flex justify-end gap-6 mt-5">
-                            <button className="btn btn-error btn-outline">Previous</button>
-                            <button className="btn btn-accent text-white">Next</button>
+                            <button className={`btn btn-error btn-outline ${lists[0]?._id === video?._id ? 'hidden' : 'block'}`} onClick={()=>nextPrevious(video._id,'previous')}>Previous</button>
+                            <button className={`btn btn-accent text-white ${lists?.length == video?._id ? 'hidden' : 'block'}`} onClick={() => nextPrevious(video._id,'next')}>Next</button>
                         </div>
                     </aside>
                     <main className="w-5/12">

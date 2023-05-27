@@ -37,7 +37,6 @@ async function run() {
             const id = parseInt(req.params.id)
             const query = {_id: id}
             const result = await collection.findOne(query);
-            console.log(result,query);
             res.send(result)
         })
         app.put('/bookmark/:id', async(req, res) => {
@@ -49,7 +48,6 @@ async function run() {
                 },
               };
               const result = await collection.updateOne(filter, updateDoc);
-              console.log(id,result);
             res.send(result)
         })
     } finally {
