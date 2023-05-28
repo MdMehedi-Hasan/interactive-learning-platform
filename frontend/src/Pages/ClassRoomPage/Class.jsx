@@ -9,12 +9,13 @@ import '../../assets/css/class.css'
 
 const Class = () => {
     const [lists, setLists] = useState([])
-    const [allLists, setAllLists] = useState([])
+    // const [allLists, setAllLists] = useState([])
     const [video, setVideo] = useState({})
-    const [progress, setProgress] = useState(null)
+    // const [progress, setProgress] = useState(null)
     const [progressPercentage, setProgressPercentage] = useState(null)
     // const [reload, setRelaod] = useState(false)
-
+    const [bookmarked, setBookmarked] = useState(false)
+console.log(bookmarked);
     const playVideo = (id) => {
         axios.get(`http://localhost:3000/${id}`)
             .then(function (response) {
@@ -25,14 +26,15 @@ const Class = () => {
             })
     }
     const nextPrevious = (id, type) => {
+        setBookmarked(false)
         if (type == 'next') {
             axios.put(`http://localhost:3000/watched/${id}`)
                 .then(function (response) {
-                    console.log(response);
+                    // console.log(response);
                     if (response.data.matchedCount === 1) {
                         axios.get('http://localhost:3000/')
                             .then(function (response) {
-                                setAllLists(response.data)
+                                // setAllLists(response.data)
                                 progressCount(response.data)
                             })
                             .catch(function (error) {
@@ -54,11 +56,11 @@ const Class = () => {
         else {
             axios.put(`http://localhost:3000/watched/${id}`)
                 .then(function (response) {
-                    console.log(response);
+                    // console.log(response);
                     if (response.data.matchedCount === 1) {
                         axios.get('http://localhost:3000/')
                             .then(function (response) {
-                                setAllLists(response.data)
+                                // setAllLists(response.data)
                                 progressCount(response.data)
                             })
                             .catch(function (error) {
@@ -86,15 +88,18 @@ const Class = () => {
         }
     }
     const bookmark = (id) => {
-        if (!video.bookmarked) {
+        console.log(id);
+        console.log(video.bookmarked);
             axios.put(`http://localhost:3000/bookmark/${id}`)
                 .then(function (response) {
                     console.log(response);
+                    if (response.data.acknowledged) {
+                        setBookmarked(true)
+                    }
                 })
                 .catch(function (error) {
                     console.log(error);
                 })
-        }
     }
     useEffect(() => {
         axios.get('http://localhost:3000/')
@@ -109,7 +114,7 @@ const Class = () => {
     }, [])
     const progressCount = (data) => {
         const sort = data.filter(list => list.watched == true)
-        setProgress(sort.length)
+        // setProgress(sort.length)
         const percentage = parseInt((sort.length * 100) / data.length)
         setProgressPercentage(percentage)
     }
@@ -127,9 +132,9 @@ const Class = () => {
                                     <img src={penIcon} alt="" className="w-5" />
                                     <span className="text-white">Take Notes</span>
                                 </div>
-                                <div className={`flex items-center ${video.bookmarked == true ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`} onClick={() => bookmark(video?._id)}>
+                                <div className={`flex items-center ${video.bookmarked == true || bookmarked == true ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`} onClick={() => bookmark(video?._id)}>
                                     <img src={bookmarkIcon} alt="" className="w-5" />
-                                    <span className="text-white">{video.bookmarked == true ? 'Bookmarked' : 'Bookmark'}</span>
+                                    <span className="text-white">{video.bookmarked == true || bookmarked == true ? 'Bookmarked' : 'Bookmark'}</span>
                                 </div>
                             </div>
                         </div>
@@ -141,7 +146,7 @@ const Class = () => {
                         <div className="collapse hidden" id="collapseBox">
                             <input type="checkbox" id="collapseCheckBox" />
                             <div className="collapse-content px-0">
-                                <textarea rows="7" className="w-full border rounded-lg p-5"></textarea>
+                                <textarea rows="7" className="w-full border rounded-lg p-5 bg-yellow-400 text-white"></textarea>
                             </div>
                             <div className="flex justify-end">
                                 <button type="" className="btn btn-error text-white">Save</button>
