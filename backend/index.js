@@ -7,7 +7,7 @@ const port = 3000
 
 app.use(cors())
 
-const uri = `mongodb+srv://mehedi:${process.env.ACCESS_KEY}@cluster0.f06bdh4.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.ACCESS_NAME}:${process.env.ACCESS_KEY}@cluster0.f06bdh4.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,

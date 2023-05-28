@@ -10,7 +10,8 @@ import '../../assets/css/class.css'
 const Class = () => {
     const [lists, setLists] = useState([])
     const [video, setVideo] = useState({})
-    const [progress, setProgress] = useState(0)
+    const [progress, setProgress] = useState(null)
+    const [progressPercentage, setProgressPercentage] = useState(null)
 
     const playVideo = (id) => {
         axios.get(`http://localhost:3000/${id}`)
@@ -26,7 +27,9 @@ const Class = () => {
         if (type == 'next') {
             axios.put(`http://localhost:3000/watched/${id}`)
             .then(function (response) {
-                console.log(response);
+                if (response.data.matchedCount===1) {
+                    progressCount(lists)
+                }
             })
             .catch(function (error) {
                 console.log(error);
@@ -65,34 +68,23 @@ const Class = () => {
             })
         }
     }
-    const progressCount = async () => {
-        console.log(lists)
-        let arr = 0
-        let length = lists?.length
-        for (let i = 0; i < length; i++){
-            if (lists[i]?.watched == true) {
-                ++arr
-                console.log("loop");
-            }
-        }
-        const result = parseInt((arr*100)/lists?.length)
-        await setProgress(result)
-        console.log(arr,result)
-    }
     useEffect(() => {
         axios.get('http://localhost:3000/')
             .then(function (response) {
                 setLists(response.data)
                 setVideo(response.data[0])
-                // progressCount()
-                if (response?.data?.length>0) {
-                    progressCount()
-                }
+                progressCount(response.data)
             })
             .catch(function (error) {
                 console.log(error);
             })
     }, [])
+    const progressCount = (data) => {
+        const sort = data.filter(list => list.watched == true)
+        setProgress(sort.length)
+        const percentage = parseInt((sort.length * 100) / data.length)
+        setProgressPercentage(percentage)
+    }
     return (
         <section>
             <Navbar />
@@ -131,10 +123,10 @@ const Class = () => {
                         <div className="border rounded-lg py-5 flex justify-between px-2 mb-5">
                             <div className="flex items-center gap-5">
                                 <span>Content Watched</span>
-                                <progress className="progress progress-accent w-40" value={progress && progress} max="100"></progress>
-                                <span>{progress && progress}%</span>
+                                <progress className="progress progress-accent w-40" value={progressPercentage && progressPercentage} max="100"></progress>
+                                <span>{progressPercentage && progressPercentage}%</span>
                             </div>
-                            <span className="pr-3">(1/{lists.length})</span>
+                            {/* <span className="pr-3">(1/{lists.length})</span> */}
                         </div>
                         <div className="h-[500px] overflow-auto border rounded-lg flex flex-col gap-5">
                             {lists.map(list =>
