@@ -9,9 +9,11 @@ import '../../assets/css/class.css'
 
 const Class = () => {
     const [lists, setLists] = useState([])
+    const [allLists, setAllLists] = useState([])
     const [video, setVideo] = useState({})
     const [progress, setProgress] = useState(null)
     const [progressPercentage, setProgressPercentage] = useState(null)
+    // const [reload, setRelaod] = useState(false)
 
     const playVideo = (id) => {
         axios.get(`http://localhost:3000/${id}`)
@@ -22,25 +24,51 @@ const Class = () => {
                 console.log(error);
             })
     }
-    const nextPrevious = (id,type) => {
-        console.log(id, type);
+    const nextPrevious = (id, type) => {
         if (type == 'next') {
             axios.put(`http://localhost:3000/watched/${id}`)
-            .then(function (response) {
-                if (response.data.matchedCount===1) {
-                    progressCount(lists)
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data.matchedCount === 1) {
+                        axios.get('http://localhost:3000/')
+                            .then(function (response) {
+                                setAllLists(response.data)
+                                progressCount(response.data)
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            })
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
 
             const videoId = ++id
             playVideo(videoId)
         }
-        else {
+        else if (type == 'previous') {
             const videoId = --id
             playVideo(videoId)
+        }
+        else {
+            axios.put(`http://localhost:3000/watched/${id}`)
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data.matchedCount === 1) {
+                        axios.get('http://localhost:3000/')
+                            .then(function (response) {
+                                setAllLists(response.data)
+                                progressCount(response.data)
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            })
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
         }
     }
     const notes = () => {
@@ -60,12 +88,12 @@ const Class = () => {
     const bookmark = (id) => {
         if (!video.bookmarked) {
             axios.put(`http://localhost:3000/bookmark/${id}`)
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
         }
     }
     useEffect(() => {
@@ -106,16 +134,17 @@ const Class = () => {
                             </div>
                         </div>
                         <div className="flex justify-end gap-6 mt-5">
-                            <button className={`btn btn-error btn-outline ${lists[0]?._id === video?._id ? 'hidden' : 'block'}`} onClick={()=>nextPrevious(video._id,'previous')}>Previous</button>
-                            <button className={`btn btn-accent text-white ${lists?.length == video?._id ? 'hidden' : 'block'}`} onClick={() => nextPrevious(video._id,'next')}>Next</button>
+                            <button className={`btn btn-error btn-outline ${lists[0]?._id === video?._id ? 'hidden' : 'block'}`} onClick={() => nextPrevious(video?._id, 'previous')}>Previous</button>
+                            <button className={`btn btn-accent text-white ${lists?.length == video?._id ? 'hidden' : 'block'}`} onClick={() => nextPrevious(video?._id, 'next')}>Next</button>
+                            <button className={`btn btn-success btn-outline text-white ${lists?.length == video?._id ? 'block' : 'hidden'}`} onClick={() => nextPrevious(video?._id, 'finish')}>Finish</button>
                         </div>
                         <div className="collapse hidden" id="collapseBox">
-                            <input type="checkbox" id="collapseCheckBox"/>
+                            <input type="checkbox" id="collapseCheckBox" />
                             <div className="collapse-content px-0">
                                 <textarea rows="7" className="w-full border rounded-lg p-5"></textarea>
                             </div>
                             <div className="flex justify-end">
-                            <button type="" className="btn btn-error text-white">Save</button>
+                                <button type="" className="btn btn-error text-white">Save</button>
                             </div>
                         </div>
                     </aside>
