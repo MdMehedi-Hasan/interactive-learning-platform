@@ -1,14 +1,7 @@
 
 # Interactive Learning Platform
 
-Please Login to test video functionalities.
-
-
-
-## Login Information
-Username: admin  
-Password: 1234
-## Installation
+## Run locally
 Please follow below steps to run the project locally.
 
 **Step 1 :-**  
@@ -48,4 +41,4 @@ To run this project, you will need to add the following environment variables to
 
 
 ## Overview
-The project aims to create a interactive learning platform. Visitors can see the courses, services and can see videos by logging in. User can take notes while seeing videos and he/she can track his progress at top right section. The project can be more interactive over the time being.
+The project aims to create a interactive learning platform. Visitors can see the courses, services and can see videos. User can take notes while seeing videos and he/she can track his progress at top right section. The project can be more interactive over the time being.
