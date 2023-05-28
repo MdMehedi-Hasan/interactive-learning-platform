@@ -122,7 +122,7 @@ console.log(bookmarked);
         <section>
             <Navbar />
             <div className="container mx-auto">
-                <h1 className="my-5 ml-10">{video?.title}</h1>
+                <h1 className="my-5 ml-10 font-serif text-xl font-bold">{video?.title}</h1>
                 <div className=" mx-auto flex justify-around gap-20 px-10 mb-20">
                     <aside className="w-7/12 overflow-hidden">
                         <iframe width="100%" height="315" src={video?.link} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
