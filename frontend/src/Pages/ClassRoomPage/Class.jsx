@@ -146,7 +146,7 @@ console.log(bookmarked);
                         <div className="collapse hidden" id="collapseBox">
                             <input type="checkbox" id="collapseCheckBox" />
                             <div className="collapse-content px-0">
-                                <textarea rows="7" className="w-full border rounded-lg p-5 bg-yellow-400 text-white"></textarea>
+                                <textarea rows="7" className="w-full border rounded-lg p-5 bg-gray-300 text-white"></textarea>
                             </div>
                             <div className="flex justify-end">
                                 <button type="" className="btn btn-error text-white">Save</button>

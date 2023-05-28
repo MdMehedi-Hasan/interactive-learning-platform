@@ -7,12 +7,10 @@ const Navbar = () => {
                     <a className="btn btn-ghost normal-case text-xl h-auto"><img src="https://interactivecares-courses.com/wp-content/uploads/2021/03/IC-logo-Telda.png" alt="" className="w-36"/></a>
                 </div>
                 <div className="flex-none">
-                    <ul className="menu menu-horizontal px-1">
-                        <li><a>Home</a></li>
-                        <li><a>About</a></li>
-                        <li><a>Services</a></li>
+                    <ul className="menu menu-horizontal px-1 font-serif">
+                        <li><Link to="/">Home</Link></li>
                         <li><Link to="/class">Class</Link></li>
-                        <li><button className="btn btn-accent rounded px-5">Log in</button></li>
+                        {/* <li><button className="btn btn-accent rounded px-5">Log in</button></li> */}
                     </ul>
                 </div>
             </div>
