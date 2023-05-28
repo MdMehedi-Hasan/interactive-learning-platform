@@ -75,8 +75,8 @@ const Class = () => {
                 console.log("loop");
             }
         }
-        const result = await parseInt((arr*100)/lists?.length)
-        setProgress(result)
+        const result = parseInt((arr*100)/lists?.length)
+        await setProgress(result)
         console.log(arr,result)
     }
     useEffect(() => {
@@ -99,7 +99,7 @@ const Class = () => {
             <div className="container mx-auto">
                 <h1 className="my-5 ml-10">{video?.title}</h1>
                 <div className=" mx-auto flex justify-around gap-20 px-10 mb-20">
-                    <aside className="w-7/12">
+                    <aside className="w-7/12 overflow-hidden">
                         <iframe width="100%" height="315" src={video?.link} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
                         <div className="rounded-b-lg bg-blue-900 p-3 py-3">
                             <div className="text-xl font-medium flex justify-between">
@@ -113,15 +113,18 @@ const Class = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="collapse hidden" id="collapseBox">
-                            <input type="checkbox" id="collapseCheckBox"/>
-                            <div className="collapse-content">
-                                <p>Notes will be written here</p>
-                            </div>
-                        </div>
                         <div className="flex justify-end gap-6 mt-5">
                             <button className={`btn btn-error btn-outline ${lists[0]?._id === video?._id ? 'hidden' : 'block'}`} onClick={()=>nextPrevious(video._id,'previous')}>Previous</button>
                             <button className={`btn btn-accent text-white ${lists?.length == video?._id ? 'hidden' : 'block'}`} onClick={() => nextPrevious(video._id,'next')}>Next</button>
+                        </div>
+                        <div className="collapse hidden" id="collapseBox">
+                            <input type="checkbox" id="collapseCheckBox"/>
+                            <div className="collapse-content px-0">
+                                <textarea rows="7" className="w-full border rounded-lg p-5"></textarea>
+                            </div>
+                            <div className="flex justify-end">
+                            <button type="" className="btn btn-error text-white">Save</button>
+                            </div>
                         </div>
                     </aside>
                     <main className="w-5/12">
@@ -135,7 +138,7 @@ const Class = () => {
                         </div>
                         <div className="h-[500px] overflow-auto border rounded-lg flex flex-col gap-5">
                             {lists.map(list =>
-                                <div key={list._id} className="card card-side bg-base-100 border rounded-lg cursor-pointer" onClick={() => playVideo(list._id)}>
+                                <div key={list._id} className="card card-side bg-gradient-to-r from-cyan-500 to-blue-500 border rounded-lg cursor-pointer" onClick={() => playVideo(list._id)}>
                                     <figure><img src={bookIcon} alt="Movie" className="w-6 ml-10" /></figure>
                                     <div className="card-body">
                                         <h2 className="card-title">{list?.title}</h2>
